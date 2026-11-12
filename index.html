@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#041c48">
+  <title>Pipeline Anomaly Detection System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 64"><path d="M8 25h12l5-9h14l5 9h12v14H44l-5 9H25l-5-9H8z"/><path d="M20 25v14m24-14v14M32 16V8m-8 0h16M27 31h10M32 26v11"/><path d="M32 37c-4 5-6 7-6 10a6 6 0 0 0 12 0c0-3-2-5-6-10z"/></svg>
+    </div>
+    <div class="brand-copy">
+      <div class="eyebrow">PIPELINE INTELLIGENCE</div>
+      <h1>PIPELINE ANOMALY <span>DETECTION SYSTEM</span></h1>
+      <p>ML-Based Leak and Blockage Detection in Pipelines</p>
+    </div>
+    <nav class="top-nav" aria-label="Main navigation">
+      <button class="nav-link active" data-page-target="home"><span>⌂</span> Home</button>
+      <button class="nav-link" data-page-target="analysis"><span>▥</span> Analysis</button>
+      <button class="nav-link" data-page-target="history"><span>◷</span> History</button>
+      <button class="nav-link" data-page-target="about"><span>ⓘ</span> About</button>
+    </nav>
+  </header>
+
+  <main class="app-shell">
+    <section class="page-view active" data-page="home">
+      <div class="page-intro">
+        <div><span class="live-indicator"></span> DEMONSTRATION</div>
+        <p>Enter the six pipeline measurements. The saved Colab-trained XGBoost model scores your input.</p>
+      </div>
+
+      <section class="home-grid" aria-label="Pipeline dashboard">
+        <aside class="glass-panel input-panel">
+          <div class="panel-heading">
+            <div class="heading-icon">⚙</div>
+            <div><h2>Input Pipeline Parameters</h2><p>Enter values or load a demo case</p></div>
+          </div>
+          <div class="demo-select-wrap">
+            <label for="demo-case-select">10 new demo cases</label>
+            <select id="demo-case-select"><option value="">Choose a sample to fill inputs</option></select>
+            <small>Five water and five oil cases; each is absent from the 65k dataset.</small>
+            <a class="download-link" href="assets/demo_cases_10.csv" download>Download the 10 cases CSV ↗</a>
+          </div>
+          <form id="prediction-form">
+            <label class="input-row">
+              <span class="parameter-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M5 13c4-6 8 6 12 0s8 6 12 0 6 0 6 0M5 20c4-6 8 6 12 0s8 6 12 0 6 0 6 0M5 27c4-6 8 6 12 0s8 6 12 0 6 0 6 0"/></svg></span>
+              <span class="input-copy">Flow Rate <small>Q · L/min</small><input id="flow_rate_l_min" name="flow_rate_l_min" type="number" min="0" step="any" value="100" required></span>
+            </label>
+            <label class="input-row">
+              <span class="parameter-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="21" r="14"/><path d="M20 21 28 13M20 7v3M6 21h3M31 21h3M20 35v-3"/><path d="M14 28h12"/></svg></span>
+              <span class="input-copy">Inlet Pressure <small>P₁ · bar</small><input id="inlet_pressure_bar" name="inlet_pressure_bar" type="number" min="0.001" step="any" value="8" required></span>
+            </label>
+            <label class="input-row">
+              <span class="parameter-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="21" r="14"/><path d="M20 21 12 14M20 7v3M6 21h3M31 21h3M20 35v-3"/><path d="M14 28h12"/></svg></span>
+              <span class="input-copy">Outlet Pressure <small>P₂ · bar</small><input id="outlet_pressure_bar" name="outlet_pressure_bar" type="number" min="0.001" step="any" value="7.6" required></span>
+            </label>
+            <label class="input-row">
+              <span class="parameter-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14"/><circle cx="20" cy="20" r="6"/><path d="M4 26 10 22M30 18l6-4M13 34l3-5M24 11l3-5"/></svg></span>
+              <span class="input-copy">Pipe Diameter <small>D · mm</small><input id="pipe_diameter_mm" name="pipe_diameter_mm" type="number" min="0.1" step="any" value="75" required></span>
+            </label>
+            <label class="input-row">
+              <span class="parameter-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M7 20h26M7 14v12M33 14v12M12 16v8M18 17v6M24 17v6M30 16v8"/><path d="m8 20 4-4m-4 4 4 4m20-4-4-4m4 4-4 4"/></svg></span>
+              <span class="input-copy">Pipe Length <small>L · m</small><input id="pipe_length_m" name="pipe_length_m" type="number" min="0.1" step="any" value="50" required></span>
+            </label>
+            <label class="input-row">
+              <span class="parameter-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5c-5 8-11 14-11 20a11 11 0 0 0 22 0c0-6-6-12-11-20z"/><path d="M14 26c0 3 2 5 5 6"/></svg></span>
+              <span class="input-copy">Fluid Type <small>Choose fluid</small><select id="fluid_type" name="fluid_type"><option>Water</option><option>Oil</option></select></span>
+            </label>
+            <button class="analyze-button" type="submit"><span>▶</span> Analyze Pipeline <b>→</b></button>
+            <p id="form-error" class="form-error" role="alert"></p>
+          </form>
+        </aside>
+
+        <section class="center-column">
+          <div class="hero-card">
+            <img src="assets/pipeline_hero.png" alt="Blue 3D pipeline with glowing flow, gauges, and an industrial background">
+            <div class="image-vignette"></div>
+            <div class="hero-label"><span class="live-indicator"></span> PIPELINE VISUALIZATION</div>
+            <div class="measurement-tag tag-inlet"><small>INLET PRESSURE · P₁</small><b id="hero-inlet">8.00 bar</b></div>
+            <div class="measurement-tag tag-flow"><small>FLOW RATE · Q</small><b id="hero-flow">100 L/min</b></div>
+            <div class="measurement-tag tag-outlet"><small>OUTLET PRESSURE · P₂</small><b id="hero-outlet">7.60 bar</b></div>
+            <div class="hero-footnote">Fixed 3D illustration · not a live sensor feed</div>
+          </div>
+
+          <article class="glass-panel pressure-panel">
+            <div class="panel-heading compact-heading">
+              <div class="heading-icon chart-icon">⌁</div>
+              <div><h2>Pressure Trend Along Pipeline</h2><p>Estimated lines between inlet and outlet readings</p></div>
+              <div class="drop-chip" id="trend-drop">ΔP 0.40 bar</div>
+            </div>
+            <div class="chart-legend"><span><i class="legend-dot normal-dot"></i> Normal reference sample</span><span><i class="legend-dot input-dot"></i> Current input estimate</span></div>
+            <svg class="pressure-chart" viewBox="0 0 760 235" role="img" aria-label="Estimated pressure trend with a simulated normal reference">
+              <defs><linearGradient id="pressureFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#14c8ff" stop-opacity=".25"/><stop offset="1" stop-color="#14c8ff" stop-opacity="0"/></linearGradient></defs>
+              <g class="chart-grid"><path d="M65 24H735M65 67H735M65 110H735M65 153H735M65 196H735"/><path d="M65 24V196M232 24V196M400 24V196M567 24V196M735 24V196"/></g>
+              <text x="12" y="30" class="chart-unit">bar</text>
+              <text id="trend-distance-0" x="58" y="220" class="chart-axis">0 m</text><text id="trend-distance-1" x="217" y="220" class="chart-axis">12.5 m</text><text id="trend-distance-2" x="385" y="220" class="chart-axis">25 m</text><text id="trend-distance-3" x="550" y="220" class="chart-axis">37.5 m</text><text id="trend-distance-4" x="700" y="220" class="chart-axis">50 m</text>
+              <text x="292" y="234" class="chart-axis-title">DISTANCE ALONG INPUT PIPE (m)</text>
+              <path id="reference-area" d="" fill="url(#pressureFill)"/>
+              <path id="reference-line" d="" class="reference-line"/>
+              <path id="current-line" d="" class="current-line"/>
+              <g id="reference-points" class="reference-points"></g><g id="current-points" class="current-points"></g>
+              <text id="current-inlet-label" x="75" y="30" class="chart-value">8.00</text><text id="current-outlet-label" x="680" y="30" class="chart-value">7.60</text>
+            </svg>
+            <p class="chart-caption" id="reference-caption">Reference line uses a saved simulated Normal record closest to the selected fluid and pipe dimensions.</p>
+          </article>
+        </section>
+
+        <aside class="glass-panel result-panel">
+          <div class="panel-heading">
+            <div class="heading-icon target-icon">◎</div>
+            <div><h2>Prediction Result</h2><p>Computed by your saved XGBoost model</p></div>
+          </div>
+          <div id="result-empty" class="result-empty"><div class="ready-orbit">✦</div><h3>Ready to Analyze</h3><p>Enter the pipeline parameters and select Analyze to see the model output.</p></div>
+          <div id="result-body" class="hidden">
+            <div class="prediction-callout" id="prediction-callout">
+              <span class="alert-mark">!</span><div><small>MODEL PREDICTION</small><h3 id="prediction-title">Possible Leakage</h3><p>Class probability <strong id="confidence-value">0.0%</strong></p></div>
+            </div>
+            <div class="result-line"><span>Predicted condition</span><b id="predicted-condition">Leakage</b></div>
+            <div class="result-line"><span>Predicted class</span><b id="predicted-class">Minor Leakage</b></div>
+            <div class="result-line"><span>Flow status</span><b id="flow-status">Flow anomaly</b></div>
+            <div class="result-line"><span>Pressure difference</span><b id="pressure-drop-result">0.40 bar</b></div>
+            <div class="result-line"><span>Derived velocity</span><b id="velocity-result">0.38 m/s</b></div>
+            <div class="score-subtitle">Class probabilities</div>
+            <div id="probability-bars" class="probability-bars"></div>
+            <div class="confidence-note">Class probability comes from the model. It is not the held-out test accuracy.</div>
+          </div>
+          <div id="loading-state" class="loading-state hidden"><span class="spinner"></span>Running the saved model…</div>
+          <div id="out-of-range-note" class="out-of-range-note hidden"></div>
+        </aside>
+      </section>
+
+      <section class="lower-grid">
+        <article class="glass-panel range-panel">
+          <div class="panel-heading compact-heading"><div class="heading-icon table-icon">▤</div><div><h2>Typical Normal Range</h2><p>Reference from simulated Normal records</p></div></div>
+          <div class="table-scroll"><table><thead><tr><th>Parameter</th><th>Your input</th><th>Typical range</th></tr></thead><tbody id="normal-range-body"></tbody></table></div>
+          <p class="small-note">Reference ranges are simulator outputs, not field standards.</p>
+        </article>
+        <article class="glass-panel class-chart-panel">
+          <div class="panel-heading compact-heading"><div class="heading-icon bars-icon">▥</div><div><h2>Class Probability</h2><p>Scores for this input from XGBoost</p></div></div>
+          <div id="class-probability-bars" class="class-probability-bars"><div class="empty-bars">Analyze an input to display its five class scores.</div></div>
+        </article>
+        <article class="glass-panel action-panel">
+          <div class="panel-heading compact-heading"><div class="heading-icon shield-icon">✓</div><div><h2>Recommended Action</h2><p>Demo guidance for the predicted class</p></div></div>
+          <div id="action-empty" class="action-empty">A class-specific action will appear after analysis.</div>
+          <div id="action-content" class="action-content hidden"><span class="action-check">✓</span><p id="recommendation-text"></p></div>
+          <p class="small-note">Illustrative guidance only; confirm readings and follow site procedures.</p>
+        </article>
+      </section>
+      <p class="page-disclaimer">This demonstration uses simulated training and test data. Predictions do not establish real pipeline condition or field accuracy.</p>
+    </section>
+
+    <section class="page-view" data-page="analysis">
+      <div class="subpage-heading"><div class="eyebrow">MODEL EVALUATION</div><h2>Analysis & Performance</h2><p>Saved evaluation results and plots from the Colab training package.</p></div>
+      <div class="metric-cards">
+        <article class="glass-panel metric-card"><small>HELD-OUT TEST ACCURACY</small><strong id="metric-accuracy">48.38%</strong><span>5,000 simulated test records</span></article>
+        <article class="glass-panel metric-card"><small>MACRO PRECISION</small><strong id="metric-precision">46.14%</strong><span>Average across five classes</span></article>
+        <article class="glass-panel metric-card"><small>MACRO RECALL</small><strong id="metric-recall">48.38%</strong><span>Average across five classes</span></article>
+        <article class="glass-panel metric-card"><small>MACRO F1</small><strong id="metric-f1">46.02%</strong><span>Balance of precision and recall</span></article>
+      </div>
+      <div class="analysis-grid">
+        <article class="glass-panel report-chart"><div class="panel-heading compact-heading"><div class="heading-icon">▦</div><div><h3>Test Confusion Matrix</h3><p>Predicted labels against simulated test labels</p></div></div><img src="assets/test_confusion_matrix.png" alt="XGBoost held-out test confusion matrix"></article>
+        <article class="glass-panel report-chart"><div class="panel-heading compact-heading"><div class="heading-icon">⌁</div><div><h3>Precision–Recall</h3><p>Saved one-vs-rest class evaluation plot</p></div></div><img src="assets/test_precision_recall.png" alt="XGBoost test precision recall curves"></article>
+        <article class="glass-panel report-chart"><div class="panel-heading compact-heading"><div class="heading-icon">↗</div><div><h3>Learning Curve</h3><p>Training progress from the Colab run</p></div></div><img src="assets/learning_curve.png" alt="XGBoost training learning curve"></article>
+        <article class="glass-panel report-chart"><div class="panel-heading compact-heading"><div class="heading-icon">▥</div><div><h3>Global Feature Importance</h3><p>Saved model-wide feature importance</p></div></div><img src="assets/global_feature_importance.png" alt="XGBoost global feature importance chart"></article>
+      </div>
+      <p class="page-disclaimer">These metrics summarize performance on simulated data only. The probability shown for a single input is a model score, not test accuracy.</p>
+    </section>
+
+    <section class="page-view" data-page="history">
+      <div class="subpage-heading history-heading"><div><div class="eyebrow">LOCAL BROWSER RECORDS</div><h2>Analysis History</h2><p>Inputs and predictions are saved in this browser on this device.</p></div><button id="clear-history" class="secondary-button">Clear History</button></div>
+      <div id="history-status" class="history-status"></div>
+      <div class="glass-panel history-panel"><div class="table-scroll"><table class="history-table"><thead><tr><th>Time</th><th>Fluid</th><th>Flow Q</th><th>Inlet P₁</th><th>Outlet P₂</th><th>Diameter D</th><th>Length L</th><th>Condition</th><th>Predicted class</th><th>Score</th><th></th></tr></thead><tbody id="history-body"></tbody></table></div><div id="history-empty" class="history-empty">No analyses saved yet. Run a prediction on Home to add it here.</div></div>
+      <p class="page-disclaimer">History stays in this browser’s local storage. Clearing browser data may remove it.</p>
+    </section>
+
+    <section class="page-view" data-page="about">
+      <div class="subpage-heading"><div class="eyebrow">PROJECT OVERVIEW</div><h2>About the Project</h2><p>A demonstration of machine learning for pipeline anomaly classification.</p></div>
+      <div class="about-grid">
+        <article class="glass-panel about-card wide-about"><div class="about-symbol">⌁</div><div><h3>Problem Statement</h3><p>Pipeline leaks and blockages can alter flow and pressure. This project explores whether an XGBoost classifier can use six pipeline inputs—flow rate, inlet pressure, outlet pressure, pipe diameter, pipe length, and fluid type—to categorize a pipeline condition.</p></div></article>
+        <article class="glass-panel about-card"><div class="about-symbol">✦</div><div><h3>Why It Is Useful</h3><p>A clear classification interface can help demonstrate how measurement patterns may be organized for review, monitoring, and follow-up inspection.</p></div></article>
+        <article class="glass-panel about-card"><div class="about-symbol">◉</div><div><h3>Model Used</h3><p>The dashboard evaluates the saved Colab-trained, five-class XGBoost model. It does not retrain or substitute a rule-based classifier.</p><ul><li>Normal</li><li>Minor Leakage</li><li>Major Leakage</li><li>Partial Blockage</li><li>Complete Blockage</li></ul></div></article>
+        <article class="glass-panel about-card"><div class="about-symbol">▤</div><div><h3>Data and Limits</h3><p>The available train, validation, and test records are simulated. The held-out test accuracy is 48.38%. This is a project prototype, not a validated real-world leak detection system.</p></div></article>
+        <article class="glass-panel about-card"><div class="about-symbol">⌖</div><div><h3>Pressure Trend</h3><p>The graph interpolates between the entered endpoint pressures and compares that line with one saved simulated Normal record. Intermediate pressure readings are not in the six inputs, so the plotted line is an estimate, not measured data or a fluid simulation.</p></div></article>
+      </div>
+    </section>
+
+    <footer class="site-footer"><span>PIPELINE ANOMALY DETECTION SYSTEM</span><span>Demonstration · Saved XGBoost model · Simulated data</span></footer>
+  </main>
+  <script src="model_runtime_data.js"></script>
+  <script src="report_data.js"></script>
+  <script src="demo_cases.js"></script>
+  <script src="xgb_runtime.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
